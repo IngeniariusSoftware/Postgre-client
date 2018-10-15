@@ -10,8 +10,14 @@ using System.Windows.Forms;
 
 namespace Data
 {
+    using Data.Properties;
+
     public partial class AuthorizationForm : Form
     {
+        private byte _lampState = 0;
+
+        private bool _isEyeOpen = false;
+
         public AuthorizationForm()
         {
             InitializeComponent();
@@ -19,7 +25,12 @@ namespace Data
 
         private void TextChanged(object sender, EventArgs e)
         {
-            LampIcon.Load("");
+            if (_lampState != 0)
+            {
+                _lampState = 0;
+                LampIcon.Image = Resources.LampOff;
+            }
+
             if (HostMaskedTextBox.Text.Length > 0 & DataBaseTextBox.Text.Length > 0 & PortTextBox.Text.Length > 0
                 & UserTextBox.Text.Length > 0 & PasswordTextBox.Text.Length > 0)
             {
@@ -27,8 +38,21 @@ namespace Data
             }
         }
 
+        private void EyeIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (_isEyeOpen)
+            {
+                PasswordTextBox.PasswordChar = Char.MinValue;
+                _isEyeOpen = false;
+                EyeIcon.Image = Resources.CloseEye;
+            }
+            else
+            {
+                PasswordTextBox.PasswordChar = '*';
+                _isEyeOpen = true;
+                EyeIcon.Image = Resources.OpenEye;
+            }
 
-
-
+        }
     }
 }
