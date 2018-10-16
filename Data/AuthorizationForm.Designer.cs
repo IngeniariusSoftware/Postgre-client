@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AuthorizationForm));
             this.StartButton = new System.Windows.Forms.Button();
-            this.LampIcon = new System.Windows.Forms.PictureBox();
             this.UserLabel = new System.Windows.Forms.Label();
             this.PasswordLabel = new System.Windows.Forms.Label();
             this.LabelDatabase = new System.Windows.Forms.Label();
@@ -39,11 +39,16 @@
             this.UserTextBox = new System.Windows.Forms.TextBox();
             this.DataBaseTextBox = new System.Windows.Forms.TextBox();
             this.PasswordTextBox = new System.Windows.Forms.TextBox();
-            this.HostMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
             this.PortTextBox = new System.Windows.Forms.TextBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.HostTextBox = new System.Windows.Forms.TextBox();
             this.EyeIcon = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.LampIcon)).BeginInit();
+            this.LampIcon = new System.Windows.Forms.PictureBox();
+            this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EyeIcon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LampIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // StartButton
@@ -56,16 +61,6 @@
             this.StartButton.TabIndex = 2;
             this.StartButton.Text = "Старт";
             this.StartButton.UseVisualStyleBackColor = true;
-            // 
-            // LampIcon
-            // 
-            this.LampIcon.Image = ((System.Drawing.Image)(resources.GetObject("LampIcon.Image")));
-            this.LampIcon.Location = new System.Drawing.Point(332, 152);
-            this.LampIcon.Name = "LampIcon";
-            this.LampIcon.Size = new System.Drawing.Size(32, 32);
-            this.LampIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.LampIcon.TabIndex = 3;
-            this.LampIcon.TabStop = false;
             // 
             // UserLabel
             // 
@@ -126,6 +121,7 @@
             this.UserTextBox.Name = "UserTextBox";
             this.UserTextBox.Size = new System.Drawing.Size(150, 23);
             this.UserTextBox.TabIndex = 10;
+            this.UserTextBox.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // DataBaseTextBox
             // 
@@ -136,6 +132,7 @@
             this.DataBaseTextBox.Name = "DataBaseTextBox";
             this.DataBaseTextBox.Size = new System.Drawing.Size(150, 23);
             this.DataBaseTextBox.TabIndex = 13;
+            this.DataBaseTextBox.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // PasswordTextBox
             // 
@@ -144,16 +141,7 @@
             this.PasswordTextBox.Name = "PasswordTextBox";
             this.PasswordTextBox.Size = new System.Drawing.Size(150, 23);
             this.PasswordTextBox.TabIndex = 14;
-            // 
-            // HostMaskedTextBox
-            // 
-            this.HostMaskedTextBox.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.HostMaskedTextBox.Location = new System.Drawing.Point(35, 53);
-            this.HostMaskedTextBox.Mask = "000/000/000/000";
-            this.HostMaskedTextBox.Name = "HostMaskedTextBox";
-            this.HostMaskedTextBox.Size = new System.Drawing.Size(150, 23);
-            this.HostMaskedTextBox.TabIndex = 16;
-            this.HostMaskedTextBox.TextChanged += new System.EventHandler(this.TextChanged);
+            this.PasswordTextBox.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // PortTextBox
             // 
@@ -166,6 +154,33 @@
             this.PortTextBox.Name = "PortTextBox";
             this.PortTextBox.Size = new System.Drawing.Size(150, 23);
             this.PortTextBox.TabIndex = 17;
+            this.PortTextBox.TextChanged += new System.EventHandler(this.TextChanged);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.StatusLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 231);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(436, 22);
+            this.statusStrip1.TabIndex = 19;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // StatusLabel
+            // 
+            this.StatusLabel.Name = "StatusLabel";
+            this.StatusLabel.Size = new System.Drawing.Size(0, 17);
+            // 
+            // HostTextBox
+            // 
+            this.HostTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.HostTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.HostTextBox.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.HostTextBox.Location = new System.Drawing.Point(35, 53);
+            this.HostTextBox.Name = "HostTextBox";
+            this.HostTextBox.Size = new System.Drawing.Size(150, 23);
+            this.HostTextBox.TabIndex = 20;
+            this.HostTextBox.TextChanged += new System.EventHandler(this.TextChanged);
             // 
             // EyeIcon
             // 
@@ -178,14 +193,29 @@
             this.EyeIcon.TabStop = false;
             this.EyeIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.EyeIcon_MouseClick);
             // 
+            // LampIcon
+            // 
+            this.LampIcon.Image = global::Data.Properties.Resources.LampOff;
+            this.LampIcon.Location = new System.Drawing.Point(332, 152);
+            this.LampIcon.Name = "LampIcon";
+            this.LampIcon.Size = new System.Drawing.Size(32, 32);
+            this.LampIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.LampIcon.TabIndex = 3;
+            this.LampIcon.TabStop = false;
+            // 
+            // UpdateTimer
+            // 
+            this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
+            // 
             // AuthorizationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(436, 237);
+            this.ClientSize = new System.Drawing.Size(436, 253);
+            this.Controls.Add(this.HostTextBox);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.EyeIcon);
             this.Controls.Add(this.PortTextBox);
-            this.Controls.Add(this.HostMaskedTextBox);
             this.Controls.Add(this.PasswordTextBox);
             this.Controls.Add(this.DataBaseTextBox);
             this.Controls.Add(this.UserTextBox);
@@ -199,8 +229,10 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AuthorizationForm";
             this.Text = "Авторизация";
-            ((System.ComponentModel.ISupportInitialize)(this.LampIcon)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EyeIcon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LampIcon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,9 +249,12 @@
         private System.Windows.Forms.TextBox UserTextBox;
         private System.Windows.Forms.TextBox DataBaseTextBox;
         private System.Windows.Forms.TextBox PasswordTextBox;
-        private System.Windows.Forms.MaskedTextBox HostMaskedTextBox;
         private System.Windows.Forms.TextBox PortTextBox;
         private System.Windows.Forms.PictureBox EyeIcon;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
+        private System.Windows.Forms.TextBox HostTextBox;
+        private System.Windows.Forms.Timer UpdateTimer;
     }
 }
 

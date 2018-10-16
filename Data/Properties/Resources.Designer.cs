@@ -93,9 +93,9 @@ namespace Data.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LampOn {
+        internal static System.Drawing.Bitmap LampOk {
             get {
-                object obj = ResourceManager.GetObject("LampOn", resourceCulture);
+                object obj = ResourceManager.GetObject("LampOk", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,9 @@ namespace Data.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap LampTry {
+        internal static System.Drawing.Bitmap LampOn {
             get {
-                object obj = ResourceManager.GetObject("LampTry", resourceCulture);
+                object obj = ResourceManager.GetObject("LampOn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

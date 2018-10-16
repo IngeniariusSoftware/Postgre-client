@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace Data
 {
     using Data.Properties;
@@ -18,23 +19,29 @@ namespace Data
 
         private bool _isEyeOpen = false;
 
+        private bool _isThreadFree = true;
+
+        private int _waitTime = 1500;
+
+        private Login _currentLogin = null;
+
         public AuthorizationForm()
         {
             InitializeComponent();
+            // Загрузка автозаполнений
+            // PasswordTextBox;
+            // HostMaskedTextBox;
+            // UserTextBox;
+            // DataBaseTextBox;
+            //  HostMaskedTextBox;
+            UpdateTimer.Start();
         }
 
-        private void TextChanged(object sender, EventArgs e)
+        private async void TextChanged(object sender, EventArgs e)
         {
-            if (_lampState != 0)
+            if (HostTextBox.Text.Length > 0 && DataBaseTextBox.Text.Length > 0 && UserTextBox.Text.Length > 0)
             {
-                _lampState = 0;
-                LampIcon.Image = Resources.LampOff;
-            }
-
-            if (HostMaskedTextBox.Text.Length > 0 & DataBaseTextBox.Text.Length > 0 & PortTextBox.Text.Length > 0
-                & UserTextBox.Text.Length > 0 & PasswordTextBox.Text.Length > 0)
-            {
-
+                _waitTime = 1500;
             }
         }
 
@@ -52,7 +59,66 @@ namespace Data
                 _isEyeOpen = true;
                 EyeIcon.Image = Resources.OpenEye;
             }
+        }
 
+        private async void UpdateTimer_Tick(object sender, EventArgs e)
+        {
+            if (_waitTime > UpdateTimer.Interval)
+            {
+                _waitTime -= UpdateTimer.Interval;
+                StartButton.Enabled = false;
+                LampIcon.Image = Resources.LampOff;
+            }
+            else
+            {
+                _waitTime = 0;
+                if (HostTextBox.Text.Length > 0 && DataBaseTextBox.Text.Length > 0 && UserTextBox.Text.Length > 0
+                    && _isThreadFree)
+                {
+                    Login login = new Login(
+                        HostTextBox.Text,
+                        DataBaseTextBox.Text,
+                        UserTextBox.Text,
+                        PasswordTextBox.Text,
+                        PortTextBox.Text);
+                    if (_currentLogin == null || !_currentLogin.Equals(login))
+                    {
+                        _isThreadFree = false;
+                        LampIcon.Image = Resources.LampOn;
+                        _currentLogin = login;
+                        Authenticator authenticator = new Authenticator();
+                        if (await authenticator.Connect(login))
+                        {
+                            if (_waitTime == 0)
+                            {
+                                LampIcon.Image = Resources.LampOk;
+                                StartButton.Enabled = true;
+                            }
+                            else
+                            {
+                                LampIcon.Image = Resources.LampOff;
+                                StartButton.Enabled = false;
+                            }
+                            
+                        }
+                        else
+                        {
+                            if (_waitTime == 0)
+                            {
+                                LampIcon.Image = Resources.LampNo;
+                            }
+                            else
+                            {
+                                LampIcon.Image = Resources.LampOff;
+                            }
+
+                            StartButton.Enabled = false;
+                        }
+
+                        _isThreadFree = true;
+                    }
+                }
+            }
         }
     }
 }
