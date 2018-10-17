@@ -45,10 +45,7 @@ namespace Data
             return dataSet.Tables[0].AsEnumerable().Select(dataRow => dataRow.Field<string>("tableName")).ToList();
         }
 
-        private string get_tables_request = string.Format(@"select relname as tableName
-                                                              from pg_class, pg_views
-                                                             where relnamespace not in (11, 99, 11480)
-                                                               and relkind = 'r'");
+
    
     }
 }
