@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Npgsql;
+
 
 namespace Data
 {
+    using Npgsql;
     public class Authenticator
     {
         public NpgsqlConnection Connection => _connection;
@@ -25,11 +26,11 @@ namespace Data
             return Task.Run(
                 () =>
                     {
+                        _connection?.Close();
                         try
                         {
-                            NpgsqlConnection connection = new NpgsqlConnection(connectionRequest);
-                            connection.Open();
-                            _connection = connection;
+                            _connection = new NpgsqlConnection(connectionRequest);
+                            _connection.Open();
                             return true;
                         }
                         catch

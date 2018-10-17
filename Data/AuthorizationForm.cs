@@ -15,15 +15,15 @@ namespace Data
 
     public partial class AuthorizationForm : Form
     {
-        private byte _lampState = 0;
+        public bool isStart = false;
 
-        private bool _isEyeOpen = false;
-
-        private bool _isThreadFree = true;
+        private bool _isEyeOpen = false, _isThreadFree = true;
 
         private int _waitTime = 1500;
 
-        private Login _currentLogin = null;
+        private Login _currentLogin, _bufLogin;
+
+        public Authenticator Authentication = new Authenticator();
 
         public AuthorizationForm()
         {
@@ -37,10 +37,16 @@ namespace Data
             UpdateTimer.Start();
         }
 
-        private async void TextChanged(object sender, EventArgs e)
+        private void TextChanged(object sender, EventArgs e)
         {
             if (HostTextBox.Text.Length > 0 && DataBaseTextBox.Text.Length > 0 && UserTextBox.Text.Length > 0)
             {
+                _bufLogin = new Login(
+                    HostTextBox.Text,
+                    DataBaseTextBox.Text,
+                    UserTextBox.Text,
+                    PasswordTextBox.Text,
+                    PortTextBox.Text);
                 _waitTime = 1500;
             }
         }
@@ -49,16 +55,22 @@ namespace Data
         {
             if (_isEyeOpen)
             {
-                PasswordTextBox.PasswordChar = Char.MinValue;
+                PasswordTextBox.PasswordChar = '*';
                 _isEyeOpen = false;
                 EyeIcon.Image = Resources.CloseEye;
             }
             else
             {
-                PasswordTextBox.PasswordChar = '*';
+                PasswordTextBox.PasswordChar = Char.MinValue;
                 _isEyeOpen = true;
                 EyeIcon.Image = Resources.OpenEye;
             }
+        }
+
+        private void StartButton_Click(object sender, EventArgs e)
+        {
+            isStart = true;
+            Close();
         }
 
         private async void UpdateTimer_Tick(object sender, EventArgs e)
@@ -72,22 +84,14 @@ namespace Data
             else
             {
                 _waitTime = 0;
-                if (HostTextBox.Text.Length > 0 && DataBaseTextBox.Text.Length > 0 && UserTextBox.Text.Length > 0
-                    && _isThreadFree)
+                if (HostTextBox.Text.Length > 0 && DataBaseTextBox.Text.Length > 0 && UserTextBox.Text.Length > 0)
                 {
-                    Login login = new Login(
-                        HostTextBox.Text,
-                        DataBaseTextBox.Text,
-                        UserTextBox.Text,
-                        PasswordTextBox.Text,
-                        PortTextBox.Text);
-                    if (_currentLogin == null || !_currentLogin.Equals(login))
+                    if (_isThreadFree && (_currentLogin == null || _currentLogin != _bufLogin))
                     {
+                        _currentLogin = _bufLogin;
                         _isThreadFree = false;
                         LampIcon.Image = Resources.LampOn;
-                        _currentLogin = login;
-                        Authenticator authenticator = new Authenticator();
-                        if (await authenticator.Connect(login))
+                        if (await Authentication.Connect(_currentLogin))
                         {
                             if (_waitTime == 0)
                             {
@@ -99,7 +103,7 @@ namespace Data
                                 LampIcon.Image = Resources.LampOff;
                                 StartButton.Enabled = false;
                             }
-                            
+
                         }
                         else
                         {
@@ -118,7 +122,17 @@ namespace Data
                         _isThreadFree = true;
                     }
                 }
+                else
+                {
+                    LampIcon.Image = Resources.LampOff;
+                    StartButton.Enabled = false;
+                }
             }
+        }
+
+        private void TextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            TextChanged(null, null);
         }
     }
 }

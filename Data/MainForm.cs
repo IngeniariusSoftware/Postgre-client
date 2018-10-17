@@ -10,11 +10,49 @@ using System.Windows.Forms;
 
 namespace Data
 {
+    using Npgsql;
+
     public partial class MainForm : Form
     {
         public MainForm()
         {
             InitializeComponent();
         }
+
+        public MainForm(NpgsqlConnection connection)
+        {
+            InitializeComponent();
+            _connection = connection;
+            Data = new DataManager(connection);
+        }
+
+        private NpgsqlConnection _connection;
+
+        public DataManager Data { get; }
+
+        private void SchemeTreeView_MouseClick(object sender, MouseEventArgs e)
+        {
+            List<string> list = GetTablesList();
+            int i;
+            i = 10;
+        }
+
+        private List<string> GetTablesList()
+        {
+            bool isSuccess;
+            string message;
+            DataSet dataSet = Data.GetDataSet(GET_TABLES_REQUEST, out isSuccess, out message);
+            return dataSet.Tables[0].AsEnumerable().Select(datarow => datarow.Field<string>("tablename")).ToList();
+        }
+
+        private const string GET_TABLES_REQUEST = @"select pn.nspname as schemaname,
+                                                           pc.relname as tablename
+                                                      from pg_class pc,
+                                                           pg_namespace pn
+                                                     where pc.relnamespace = pn.oid
+                                                       and pc.relkind = 'r'::""char""
+                                                       and pn.nspname <> 'pg_catalog'
+                                                       and pn.nspname <> 'information_schema'
+                                                       and pn.nspname !~ '^pg_toast';";
     }
 }

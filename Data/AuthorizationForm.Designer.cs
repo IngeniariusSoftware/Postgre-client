@@ -43,9 +43,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.HostTextBox = new System.Windows.Forms.TextBox();
+            this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
+            this.npgsqlCommand1 = new Npgsql.NpgsqlCommand();
             this.EyeIcon = new System.Windows.Forms.PictureBox();
             this.LampIcon = new System.Windows.Forms.PictureBox();
-            this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EyeIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LampIcon)).BeginInit();
@@ -58,9 +59,10 @@
             this.StartButton.Location = new System.Drawing.Point(226, 164);
             this.StartButton.Name = "StartButton";
             this.StartButton.Size = new System.Drawing.Size(90, 23);
-            this.StartButton.TabIndex = 2;
+            this.StartButton.TabIndex = 3;
             this.StartButton.Text = "Старт";
             this.StartButton.UseVisualStyleBackColor = true;
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
             // UserLabel
             // 
@@ -69,7 +71,7 @@
             this.UserLabel.Location = new System.Drawing.Point(229, 32);
             this.UserLabel.Name = "UserLabel";
             this.UserLabel.Size = new System.Drawing.Size(111, 18);
-            this.UserLabel.TabIndex = 4;
+            this.UserLabel.TabIndex = 10;
             this.UserLabel.Text = "Пользователь";
             // 
             // PasswordLabel
@@ -79,7 +81,7 @@
             this.PasswordLabel.Location = new System.Drawing.Point(229, 91);
             this.PasswordLabel.Name = "PasswordLabel";
             this.PasswordLabel.Size = new System.Drawing.Size(63, 18);
-            this.PasswordLabel.TabIndex = 5;
+            this.PasswordLabel.TabIndex = 10;
             this.PasswordLabel.Text = "Пароль";
             // 
             // LabelDatabase
@@ -89,7 +91,7 @@
             this.LabelDatabase.Location = new System.Drawing.Point(38, 91);
             this.LabelDatabase.Name = "LabelDatabase";
             this.LabelDatabase.Size = new System.Drawing.Size(101, 18);
-            this.LabelDatabase.TabIndex = 6;
+            this.LabelDatabase.TabIndex = 10;
             this.LabelDatabase.Text = "База данных";
             // 
             // PortLabel
@@ -114,47 +116,56 @@
             // 
             // UserTextBox
             // 
-            this.UserTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.UserTextBox.AutoCompleteCustomSource.AddRange(new string[] {
+            "postgres"});
+            this.UserTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.UserTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.UserTextBox.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.UserTextBox.Location = new System.Drawing.Point(226, 53);
             this.UserTextBox.Name = "UserTextBox";
             this.UserTextBox.Size = new System.Drawing.Size(150, 23);
-            this.UserTextBox.TabIndex = 10;
+            this.UserTextBox.TabIndex = 2;
             this.UserTextBox.TextChanged += new System.EventHandler(this.TextChanged);
+            this.UserTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // DataBaseTextBox
             // 
-            this.DataBaseTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.DataBaseTextBox.AutoCompleteCustomSource.AddRange(new string[] {
+            "postgres"});
+            this.DataBaseTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.DataBaseTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.DataBaseTextBox.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.DataBaseTextBox.Location = new System.Drawing.Point(35, 112);
             this.DataBaseTextBox.Name = "DataBaseTextBox";
             this.DataBaseTextBox.Size = new System.Drawing.Size(150, 23);
-            this.DataBaseTextBox.TabIndex = 13;
+            this.DataBaseTextBox.TabIndex = 1;
             this.DataBaseTextBox.TextChanged += new System.EventHandler(this.TextChanged);
+            this.DataBaseTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // PasswordTextBox
             // 
             this.PasswordTextBox.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.PasswordTextBox.Location = new System.Drawing.Point(226, 112);
             this.PasswordTextBox.Name = "PasswordTextBox";
+            this.PasswordTextBox.PasswordChar = '*';
             this.PasswordTextBox.Size = new System.Drawing.Size(150, 23);
-            this.PasswordTextBox.TabIndex = 14;
+            this.PasswordTextBox.TabIndex = 4;
             this.PasswordTextBox.TextChanged += new System.EventHandler(this.TextChanged);
+            this.PasswordTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // PortTextBox
             // 
             this.PortTextBox.AutoCompleteCustomSource.AddRange(new string[] {
             "5432"});
-            this.PortTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.PortTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.PortTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.PortTextBox.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.PortTextBox.Location = new System.Drawing.Point(35, 167);
             this.PortTextBox.Name = "PortTextBox";
             this.PortTextBox.Size = new System.Drawing.Size(150, 23);
-            this.PortTextBox.TabIndex = 17;
+            this.PortTextBox.TabIndex = 5;
             this.PortTextBox.TextChanged += new System.EventHandler(this.TextChanged);
+            this.PortTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // statusStrip1
             // 
@@ -173,14 +184,27 @@
             // 
             // HostTextBox
             // 
-            this.HostTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.HostTextBox.AutoCompleteCustomSource.AddRange(new string[] {
+            "localhost"});
+            this.HostTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.HostTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.HostTextBox.Font = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.HostTextBox.Location = new System.Drawing.Point(35, 53);
             this.HostTextBox.Name = "HostTextBox";
             this.HostTextBox.Size = new System.Drawing.Size(150, 23);
-            this.HostTextBox.TabIndex = 20;
+            this.HostTextBox.TabIndex = 0;
             this.HostTextBox.TextChanged += new System.EventHandler(this.TextChanged);
+            this.HostTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
+            // 
+            // UpdateTimer
+            // 
+            this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
+            // 
+            // npgsqlCommand1
+            // 
+            this.npgsqlCommand1.AllResultTypesAreUnknown = false;
+            this.npgsqlCommand1.Transaction = null;
+            this.npgsqlCommand1.UnknownResultTypeList = null;
             // 
             // EyeIcon
             // 
@@ -203,10 +227,6 @@
             this.LampIcon.TabIndex = 3;
             this.LampIcon.TabStop = false;
             // 
-            // UpdateTimer
-            // 
-            this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
-            // 
             // AuthorizationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -227,6 +247,8 @@
             this.Controls.Add(this.LampIcon);
             this.Controls.Add(this.StartButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(452, 292);
+            this.MinimumSize = new System.Drawing.Size(452, 292);
             this.Name = "AuthorizationForm";
             this.Text = "Авторизация";
             this.statusStrip1.ResumeLayout(false);
@@ -255,6 +277,7 @@
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
         private System.Windows.Forms.TextBox HostTextBox;
         private System.Windows.Forms.Timer UpdateTimer;
+        private Npgsql.NpgsqlCommand npgsqlCommand1;
     }
 }
 

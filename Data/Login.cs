@@ -26,18 +26,5 @@ namespace Data
             Password = password;
             Port = port;
         }
-
-        public bool Equals(Login login)
-        {
-            if (login.Host == Host && login.Port == Port && login.DataBase == DataBase && login.Password == Password
-                && login.User == User)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
     }
 }

@@ -16,7 +16,12 @@ namespace Data
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AuthorizationForm());
+            AuthorizationForm authForm = new AuthorizationForm();
+            Application.Run(authForm);
+            if (authForm.isStart)
+            {
+                Application.Run(new MainForm(authForm.Authentication.Connection));
+            }
         }
     }
 }
