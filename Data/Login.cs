@@ -18,6 +18,15 @@ namespace Data
 
         public string Port { get; }
 
+        public Login()
+        {
+            Host = string.Empty;
+            DataBase = string.Empty;
+            User = string.Empty;
+            Password = string.Empty;
+            Port = string.Empty;
+        }
+
         public Login(string host, string dataBase, string user, string password = "", string port = "5432")
         {
             Host = host;

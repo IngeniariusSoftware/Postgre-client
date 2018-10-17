@@ -41,18 +41,14 @@ namespace Data
         {
             bool isSuccess;
             string message;
-            DataSet dataSet = Data.GetDataSet(GET_TABLES_REQUEST, out isSuccess, out message);
-            return dataSet.Tables[0].AsEnumerable().Select(datarow => datarow.Field<string>("tablename")).ToList();
+            DataSet dataSet = Data.GetDataSet(get_tables_request, out isSuccess, out message);
+            return dataSet.Tables[0].AsEnumerable().Select(dataRow => dataRow.Field<string>("tableName")).ToList();
         }
 
-        private const string GET_TABLES_REQUEST = @"select pn.nspname as schemaname,
-                                                           pc.relname as tablename
-                                                      from pg_class pc,
-                                                           pg_namespace pn
-                                                     where pc.relnamespace = pn.oid
-                                                       and pc.relkind = 'r'::""char""
-                                                       and pn.nspname <> 'pg_catalog'
-                                                       and pn.nspname <> 'information_schema'
-                                                       and pn.nspname !~ '^pg_toast';";
+        private string get_tables_request = string.Format(@"select relname as tableName
+                                                              from pg_class, pg_views
+                                                             where relnamespace not in (11, 99, 11480)
+                                                               and relkind = 'r'");
+   
     }
 }

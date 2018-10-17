@@ -125,6 +125,7 @@
             this.UserTextBox.Name = "UserTextBox";
             this.UserTextBox.Size = new System.Drawing.Size(150, 23);
             this.UserTextBox.TabIndex = 2;
+            this.UserTextBox.Text = "postgres";
             this.UserTextBox.TextChanged += new System.EventHandler(this.TextChanged);
             this.UserTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
@@ -139,6 +140,7 @@
             this.DataBaseTextBox.Name = "DataBaseTextBox";
             this.DataBaseTextBox.Size = new System.Drawing.Size(150, 23);
             this.DataBaseTextBox.TabIndex = 1;
+            this.DataBaseTextBox.Text = "postgres";
             this.DataBaseTextBox.TextChanged += new System.EventHandler(this.TextChanged);
             this.DataBaseTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
@@ -193,6 +195,7 @@
             this.HostTextBox.Name = "HostTextBox";
             this.HostTextBox.Size = new System.Drawing.Size(150, 23);
             this.HostTextBox.TabIndex = 0;
+            this.HostTextBox.Text = "localhost";
             this.HostTextBox.TextChanged += new System.EventHandler(this.TextChanged);
             this.HostTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 

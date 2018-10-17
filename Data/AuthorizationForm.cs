@@ -19,7 +19,7 @@ namespace Data
 
         private bool _isEyeOpen = false, _isThreadFree = true;
 
-        private int _waitTime = 1500;
+        private int _waitTime = 0;
 
         private Login _currentLogin, _bufLogin;
 
@@ -35,19 +35,26 @@ namespace Data
             // DataBaseTextBox;
             //  HostMaskedTextBox;
             UpdateTimer.Start();
+            CreateLogin(out _bufLogin);
+        }
+        
+        private void CreateLogin(out Login login)
+        {
+            login = new Login(
+                HostTextBox.Text,
+                DataBaseTextBox.Text,
+                UserTextBox.Text,
+                PasswordTextBox.Text,
+                PortTextBox.Text);
         }
 
         private void TextChanged(object sender, EventArgs e)
         {
             if (HostTextBox.Text.Length > 0 && DataBaseTextBox.Text.Length > 0 && UserTextBox.Text.Length > 0)
             {
-                _bufLogin = new Login(
-                    HostTextBox.Text,
-                    DataBaseTextBox.Text,
-                    UserTextBox.Text,
-                    PasswordTextBox.Text,
-                    PortTextBox.Text);
+                CreateLogin(out _bufLogin);
                 _waitTime = 1500;
+                UpdateTimer.Start();
             }
         }
 
@@ -84,9 +91,10 @@ namespace Data
             else
             {
                 _waitTime = 0;
+                UpdateTimer.Stop();
                 if (HostTextBox.Text.Length > 0 && DataBaseTextBox.Text.Length > 0 && UserTextBox.Text.Length > 0)
                 {
-                    if (_isThreadFree && (_currentLogin == null || _currentLogin != _bufLogin))
+                    if (_isThreadFree && _bufLogin != null && _currentLogin != _bufLogin)
                     {
                         _currentLogin = _bufLogin;
                         _isThreadFree = false;
