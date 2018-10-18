@@ -40,14 +40,13 @@
             this.DataBaseTextBox = new System.Windows.Forms.TextBox();
             this.PasswordTextBox = new System.Windows.Forms.TextBox();
             this.PortTextBox = new System.Windows.Forms.TextBox();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.StatusStrip = new System.Windows.Forms.StatusStrip();
             this.StatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.HostTextBox = new System.Windows.Forms.TextBox();
             this.UpdateTimer = new System.Windows.Forms.Timer(this.components);
-            this.npgsqlCommand1 = new Npgsql.NpgsqlCommand();
             this.EyeIcon = new System.Windows.Forms.PictureBox();
             this.LampIcon = new System.Windows.Forms.PictureBox();
-            this.statusStrip1.SuspendLayout();
+            this.StatusStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EyeIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LampIcon)).BeginInit();
             this.SuspendLayout();
@@ -169,15 +168,15 @@
             this.PortTextBox.TextChanged += new System.EventHandler(this.TextChanged);
             this.PortTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
-            // statusStrip1
+            // StatusStrip
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.StatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 231);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(436, 22);
-            this.statusStrip1.TabIndex = 19;
-            this.statusStrip1.Text = "statusStrip1";
+            this.StatusStrip.Location = new System.Drawing.Point(0, 231);
+            this.StatusStrip.Name = "StatusStrip";
+            this.StatusStrip.Size = new System.Drawing.Size(436, 22);
+            this.StatusStrip.TabIndex = 19;
+            this.StatusStrip.Text = "statusStrip1";
             // 
             // StatusLabel
             // 
@@ -202,12 +201,6 @@
             // UpdateTimer
             // 
             this.UpdateTimer.Tick += new System.EventHandler(this.UpdateTimer_Tick);
-            // 
-            // npgsqlCommand1
-            // 
-            this.npgsqlCommand1.AllResultTypesAreUnknown = false;
-            this.npgsqlCommand1.Transaction = null;
-            this.npgsqlCommand1.UnknownResultTypeList = null;
             // 
             // EyeIcon
             // 
@@ -236,7 +229,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(436, 253);
             this.Controls.Add(this.HostTextBox);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.StatusStrip);
             this.Controls.Add(this.EyeIcon);
             this.Controls.Add(this.PortTextBox);
             this.Controls.Add(this.PasswordTextBox);
@@ -254,8 +247,8 @@
             this.MinimumSize = new System.Drawing.Size(452, 292);
             this.Name = "AuthorizationForm";
             this.Text = "Авторизация";
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.StatusStrip.ResumeLayout(false);
+            this.StatusStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.EyeIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.LampIcon)).EndInit();
             this.ResumeLayout(false);
@@ -276,11 +269,10 @@
         private System.Windows.Forms.TextBox PasswordTextBox;
         private System.Windows.Forms.TextBox PortTextBox;
         private System.Windows.Forms.PictureBox EyeIcon;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip StatusStrip;
         private System.Windows.Forms.ToolStripStatusLabel StatusLabel;
         private System.Windows.Forms.TextBox HostTextBox;
         private System.Windows.Forms.Timer UpdateTimer;
-        private Npgsql.NpgsqlCommand npgsqlCommand1;
     }
 }
 
