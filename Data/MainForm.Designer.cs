@@ -30,41 +30,39 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("postgres");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.TabsCotrol = new System.Windows.Forms.TabControl();
+            this.ModeTabControl = new System.Windows.Forms.TabControl();
             this.SchemePage = new System.Windows.Forms.TabPage();
             this.DataView = new System.Windows.Forms.DataGridView();
             this.TreeScheme = new System.Windows.Forms.TreeView();
             this.ConsolePage = new System.Windows.Forms.TabPage();
-            this.Scintilla = new ScintillaNET.Scintilla();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.PageLog = new System.Windows.Forms.TabPage();
+            this.ResultTabControl = new System.Windows.Forms.TabControl();
             this.ResultPage = new System.Windows.Forms.TabPage();
-            this.LogTextBox = new System.Windows.Forms.RichTextBox();
             this.ResultView = new System.Windows.Forms.DataGridView();
-            this.TabsCotrol.SuspendLayout();
+            this.PageLog = new System.Windows.Forms.TabPage();
+            this.LogTextBox = new System.Windows.Forms.RichTextBox();
+            this.Scintilla = new ScintillaNET.Scintilla();
+            this.ModeTabControl.SuspendLayout();
             this.SchemePage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataView)).BeginInit();
             this.ConsolePage.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.PageLog.SuspendLayout();
+            this.ResultTabControl.SuspendLayout();
             this.ResultPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ResultView)).BeginInit();
+            this.PageLog.SuspendLayout();
             this.SuspendLayout();
             // 
-            // TabsCotrol
+            // ModeTabControl
             // 
-            this.TabsCotrol.Controls.Add(this.SchemePage);
-            this.TabsCotrol.Controls.Add(this.ConsolePage);
-            this.TabsCotrol.ItemSize = new System.Drawing.Size(60, 25);
-            this.TabsCotrol.Location = new System.Drawing.Point(-1, -2);
-            this.TabsCotrol.Name = "TabsCotrol";
-            this.TabsCotrol.SelectedIndex = 0;
-            this.TabsCotrol.Size = new System.Drawing.Size(1007, 537);
-            this.TabsCotrol.TabIndex = 0;
+            this.ModeTabControl.Controls.Add(this.SchemePage);
+            this.ModeTabControl.Controls.Add(this.ConsolePage);
+            this.ModeTabControl.ItemSize = new System.Drawing.Size(60, 25);
+            this.ModeTabControl.Location = new System.Drawing.Point(-1, -2);
+            this.ModeTabControl.Name = "ModeTabControl";
+            this.ModeTabControl.SelectedIndex = 0;
+            this.ModeTabControl.Size = new System.Drawing.Size(1007, 537);
+            this.ModeTabControl.TabIndex = 0;
             // 
             // SchemePage
             // 
@@ -86,6 +84,7 @@
             this.DataView.Name = "DataView";
             this.DataView.Size = new System.Drawing.Size(761, 498);
             this.DataView.TabIndex = 1;
+            this.DataView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.DataView_KeyDown);
             // 
             // TreeScheme
             // 
@@ -100,11 +99,11 @@
             this.TreeScheme.Size = new System.Drawing.Size(231, 498);
             this.TreeScheme.TabIndex = 0;
             this.TreeScheme.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SchemeTreeView_AfterSelect);
-            this.TreeScheme.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SchemeTreeView_MouseClick);
+            this.TreeScheme.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TreeScheme_KeyDown);
             // 
             // ConsolePage
             // 
-            this.ConsolePage.Controls.Add(this.tabControl1);
+            this.ConsolePage.Controls.Add(this.ResultTabControl);
             this.ConsolePage.Controls.Add(this.Scintilla);
             this.ConsolePage.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.ConsolePage.Location = new System.Drawing.Point(4, 29);
@@ -114,6 +113,54 @@
             this.ConsolePage.TabIndex = 1;
             this.ConsolePage.Text = "Консоль";
             this.ConsolePage.UseVisualStyleBackColor = true;
+            // 
+            // ResultTabControl
+            // 
+            this.ResultTabControl.Controls.Add(this.ResultPage);
+            this.ResultTabControl.Controls.Add(this.PageLog);
+            this.ResultTabControl.Location = new System.Drawing.Point(3, 322);
+            this.ResultTabControl.Name = "ResultTabControl";
+            this.ResultTabControl.SelectedIndex = 0;
+            this.ResultTabControl.Size = new System.Drawing.Size(991, 182);
+            this.ResultTabControl.TabIndex = 2;
+            // 
+            // ResultPage
+            // 
+            this.ResultPage.Controls.Add(this.ResultView);
+            this.ResultPage.Location = new System.Drawing.Point(4, 27);
+            this.ResultPage.Name = "ResultPage";
+            this.ResultPage.Padding = new System.Windows.Forms.Padding(3);
+            this.ResultPage.Size = new System.Drawing.Size(983, 151);
+            this.ResultPage.TabIndex = 1;
+            this.ResultPage.Text = "Результат";
+            this.ResultPage.UseVisualStyleBackColor = true;
+            // 
+            // ResultView
+            // 
+            this.ResultView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ResultView.Location = new System.Drawing.Point(4, 4);
+            this.ResultView.Name = "ResultView";
+            this.ResultView.Size = new System.Drawing.Size(973, 144);
+            this.ResultView.TabIndex = 0;
+            // 
+            // PageLog
+            // 
+            this.PageLog.Controls.Add(this.LogTextBox);
+            this.PageLog.Location = new System.Drawing.Point(4, 27);
+            this.PageLog.Name = "PageLog";
+            this.PageLog.Padding = new System.Windows.Forms.Padding(3);
+            this.PageLog.Size = new System.Drawing.Size(983, 151);
+            this.PageLog.TabIndex = 0;
+            this.PageLog.Text = "Логи";
+            this.PageLog.UseVisualStyleBackColor = true;
+            // 
+            // LogTextBox
+            // 
+            this.LogTextBox.Location = new System.Drawing.Point(3, 6);
+            this.LogTextBox.Name = "LogTextBox";
+            this.LogTextBox.Size = new System.Drawing.Size(974, 142);
+            this.LogTextBox.TabIndex = 0;
+            this.LogTextBox.Text = "";
             // 
             // Scintilla
             // 
@@ -128,79 +175,25 @@
             this.Scintilla.TabIndex = 0;
             this.Scintilla.KeyDown += new System.Windows.Forms.KeyEventHandler(this.form_KeyDown);
             // 
-            // imageList1
-            // 
-            this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.PageLog);
-            this.tabControl1.Controls.Add(this.ResultPage);
-            this.tabControl1.Location = new System.Drawing.Point(3, 322);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(991, 182);
-            this.tabControl1.TabIndex = 2;
-            // 
-            // PageLog
-            // 
-            this.PageLog.Controls.Add(this.LogTextBox);
-            this.PageLog.Location = new System.Drawing.Point(4, 27);
-            this.PageLog.Name = "PageLog";
-            this.PageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.PageLog.Size = new System.Drawing.Size(983, 151);
-            this.PageLog.TabIndex = 0;
-            this.PageLog.Text = "Логи";
-            this.PageLog.UseVisualStyleBackColor = true;
-            // 
-            // ResultPage
-            // 
-            this.ResultPage.Controls.Add(this.ResultView);
-            this.ResultPage.Location = new System.Drawing.Point(4, 27);
-            this.ResultPage.Name = "ResultPage";
-            this.ResultPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ResultPage.Size = new System.Drawing.Size(983, 151);
-            this.ResultPage.TabIndex = 1;
-            this.ResultPage.Text = "Результат";
-            this.ResultPage.UseVisualStyleBackColor = true;
-            // 
-            // LogTextBox
-            // 
-            this.LogTextBox.Location = new System.Drawing.Point(3, 6);
-            this.LogTextBox.Name = "LogTextBox";
-            this.LogTextBox.Size = new System.Drawing.Size(974, 142);
-            this.LogTextBox.TabIndex = 0;
-            this.LogTextBox.Text = "";
-            // 
-            // ResultView
-            // 
-            this.ResultView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.ResultView.Location = new System.Drawing.Point(4, 4);
-            this.ResultView.Name = "ResultView";
-            this.ResultView.Size = new System.Drawing.Size(973, 144);
-            this.ResultView.TabIndex = 0;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1005, 541);
-            this.Controls.Add(this.TabsCotrol);
+            this.Controls.Add(this.ModeTabControl);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1021, 580);
             this.Name = "MainForm";
             this.Text = "Работа с базой";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.form_KeyDown);
-            this.TabsCotrol.ResumeLayout(false);
+            this.ModeTabControl.ResumeLayout(false);
             this.SchemePage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.DataView)).EndInit();
             this.ConsolePage.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
-            this.PageLog.ResumeLayout(false);
+            this.ResultTabControl.ResumeLayout(false);
             this.ResultPage.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ResultView)).EndInit();
+            this.PageLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -209,14 +202,13 @@
 
         #endregion
 
-        private System.Windows.Forms.TabControl TabsCotrol;
+        private System.Windows.Forms.TabControl ModeTabControl;
         private System.Windows.Forms.TabPage SchemePage;
         private System.Windows.Forms.TabPage ConsolePage;
         private System.Windows.Forms.TreeView TreeScheme;
         private System.Windows.Forms.DataGridView DataView;
         private ScintillaNET.Scintilla Scintilla;
-        private System.Windows.Forms.ImageList imageList1;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl ResultTabControl;
         private System.Windows.Forms.TabPage PageLog;
         private System.Windows.Forms.TabPage ResultPage;
         private System.Windows.Forms.RichTextBox LogTextBox;
