@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Data
 {
     using System.Data;
+    using System.Diagnostics;
     using System.Windows.Forms;
 
     using Npgsql;
@@ -15,7 +16,7 @@ namespace Data
     {
         public string CurrentScheme = string.Empty;
 
-        private NpgsqlConnection _connection;
+        public NpgsqlConnection _connection;
 
         public DataManager(NpgsqlConnection connection)
         {
@@ -24,10 +25,10 @@ namespace Data
 
         public DataTable GetTable(string objectType, string objectName)
         {
-            DataTableCollection dataTables = MakeRequest(objectType, objectName).Tables;
-            if (dataTables.Count > 0)
+            DataTableCollection dataTables = MakeRequest(objectType, objectName)?.Tables;
+            if (dataTables?.Count > 0)
             {
-            return dataTables[0];
+                return dataTables[0];
             }
             else
             {
@@ -115,6 +116,12 @@ namespace Data
                                                      and pp.proname = '{1}'", CurrentScheme, objectName);
                         break;
                     }
+
+                case "drop":
+                    {
+                        request = string.Format("drop table {0}.{1}", CurrentScheme, objectName);
+                        break;
+                    }
             }
 
             return GetDataSet(request);
@@ -124,6 +131,7 @@ namespace Data
         public DataSet GetDataSet(string request)
         {
             DataSet dataSet  = new DataSet();
+            string message;
             try
             {
                 NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(request, _connection);
@@ -131,7 +139,7 @@ namespace Data
             }
             catch
             {
-                dataSet = null;
+
             }
 
             return dataSet;
