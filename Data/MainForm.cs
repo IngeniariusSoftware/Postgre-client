@@ -10,14 +10,17 @@ using System.Windows.Forms;
 
 namespace Data
 {
+    using System.Diagnostics;
+    using System.IO;
     using System.Text.RegularExpressions;
-
     using Npgsql;
-
     using ScintillaNET;
 
     public partial class MainForm : Form
     {
+        private TreeNode currentNode;
+
+        private int CountLogs = 1;
         private void InitializeScintilla()
         {
             Scintilla.StyleResetDefault();
@@ -77,13 +80,6 @@ namespace Data
 
         public DataManager Data { get; }
 
-        private void SchemeTreeView_MouseClick(object sender, MouseEventArgs e)
-        {
-            //List<string> list = GetTablesList();
-            int i;
-            i = 10;
-        }
-
         private List<string> GetKitNodes(List<string> nodes, TreeViewEventArgs e)
         {
             TreeNodeCollection nodesForDelete = e.Node.Nodes;
@@ -139,11 +135,12 @@ namespace Data
 
                 case 1:
                     {
+                        e.Node.Nodes.Clear();
                         nodes = Data.GetObjects("schemes");
 
-                        foreach (string kitNode in GetKitNodes(nodes, e))
+                        foreach (string node in nodes)
                         {
-                            e.Node.Nodes.Add(kitNode);
+                            e.Node.Nodes.Add(node);
                             e.Node.Nodes[e.Node.Nodes.Count - 1].Name = "schemes";
                         }
 
@@ -168,11 +165,13 @@ namespace Data
 
                 case 3:
                     {
+                        e.Node.Nodes.Clear();
                         nodes = Data.GetObjects(e.Node.Name);
+                       // nodes = Data.GetObjects(e.Node.Name);
 
-                        foreach (string kitNode in GetKitNodes(nodes, e))
+                        foreach (string node in nodes)
                         {
-                            e.Node.Nodes.Add(kitNode);
+                            e.Node.Nodes.Add(node);
                             e.Node.Nodes[e.Node.Nodes.Count - 1].Name = e.Node.Name.Substring(0, e.Node.Name.Length - 1);
                         }
 
@@ -181,6 +180,7 @@ namespace Data
 
                 case 4:
                     {
+                        currentNode = e.Node;
                         DataView.DataSource = Data.GetTable(e.Node.Name, e.Node.Text);
                         break;
                     }
@@ -191,8 +191,66 @@ namespace Data
         {
             if (e.KeyValue == 116)
             {
-                ResultView.DataSource = Data.GetDataSet(Scintilla.Text).Tables[0];
+                DataTableCollection dataTables = Data.GetDataSet(Scintilla.Text)?.Tables;
+                if (dataTables?.Count > 0)
+                {
+                    ResultView.DataSource = dataTables[0];
+                    LogTextBox.Text += string.Format("{0}) {1}: Данные успешно найдены\n", CountLogs,DateTime.Now);
+                    CountLogs++;
+                }
+                else
+                {
+                    LogTextBox.Text += string.Format("{0}) {1}: Не удалось получить или найти данные\n", CountLogs,DateTime.Now);
+                    ResultView.DataSource = null;
+                    CountLogs++;
+                }
             }
+        }
+
+
+        private void UpdateTable()
+        {
+            try
+            {
+                string request = string.Format("select * from {0}", currentNode.Text);
+                NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter(request, Data._connection);
+                NpgsqlCommandBuilder commandBuilder = new NpgsqlCommandBuilder(dataAdapter);
+                dataAdapter.SelectCommand = new NpgsqlCommand(request, Data._connection);
+                dataAdapter.UpdateCommand = commandBuilder.GetUpdateCommand();
+                dataAdapter.InsertCommand = commandBuilder.GetInsertCommand();
+                dataAdapter.DeleteCommand = commandBuilder.GetDeleteCommand();
+                var rows = ((DataTable)DataView.DataSource).Rows;
+                var dataRows = new List<DataRow>();
+                foreach (DataRow elem in rows)
+                {
+                    dataRows.Add(elem);
+                }
+
+                dataAdapter.Update(dataRows.ToArray());
+            }
+            catch 
+            {
+                LogTextBox.Text += string.Format("{0}) {1}: Не удалось обновить данные в таблице, т.к. отсутствует первичный ключ\n", CountLogs, DateTime.Now);
+                CountLogs++;
+            }
+
+        }
+
+        private void DataView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == 13)
+            {
+                UpdateTable();
+            }
+        }
+
+        private void TreeScheme_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == 46)
+            {
+                Data.GetTable("drop", currentNode.Text);
+            }
+            
         }
     }
 }
