@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Data
 {
-    using System.Diagnostics;
-    using System.IO;
-    using System.Text.RegularExpressions;
     using Npgsql;
+
     using ScintillaNET;
 
     public partial class MainForm : Form
@@ -21,6 +16,7 @@ namespace Data
         private TreeNode currentNode;
 
         private int CountLogs = 1;
+
         private void InitializeScintilla()
         {
             Scintilla.StyleResetDefault();
@@ -51,13 +47,16 @@ namespace Data
 
             // Set keyword lists
             // Word = 0
-            Scintilla.SetKeywords(0,
+            Scintilla.SetKeywords(
+                0,
                 @"add alter as authorization backup begin bigint binary bit break browse bulk by cascade case catch check checkpoint close clustered column commit compute constraint containstable continue create current cursor cursor database date datetime datetime2 datetimeoffset dbcc deallocate decimal declare default delete deny desc disk distinct distributed double drop dump else end errlvl escape except exec execute exit external fetch file fillfactor float for foreign freetext freetexttable from full function goto grant group having hierarchyid holdlock identity identity_insert identitycol if image index insert int intersect into key kill lineno load merge money national nchar nocheck nocount nolock nonclustered ntext numeric nvarchar of off offsets on open opendatasource openquery openrowset openxml option order over percent plan precision primary print proc procedure public raiserror read readtext real reconfigure references replication restore restrict return revert revoke rollback rowcount rowguidcol rule save schema securityaudit select set setuser shutdown smalldatetime smallint smallmoney sql_variant statistics table table tablesample text textsize then time timestamp tinyint to top tran transaction trigger truncate try union unique uniqueidentifier update updatetext use user values varbinary varchar varying view waitfor when where while with writetext xml go ");
             // Word2 = 1
-            Scintilla.SetKeywords(1,
+            Scintilla.SetKeywords(
+                1,
                 @"ascii cast char charindex ceiling coalesce collate contains convert current_date current_time current_timestamp current_user floor isnull max min nullif object_id session_user substring system_user tsequal ");
             // User1 = 4
-            Scintilla.SetKeywords(4,
+            Scintilla.SetKeywords(
+                4,
                 @"all and any between cross exists in inner is join left like not null or outer pivot right some unpivot ( ) * ");
             // Подсветка таблиц 
             string keyWords = "";
@@ -167,12 +166,13 @@ namespace Data
                     {
                         e.Node.Nodes.Clear();
                         nodes = Data.GetObjects(e.Node.Name);
-                       // nodes = Data.GetObjects(e.Node.Name);
+                        // nodes = Data.GetObjects(e.Node.Name);
 
                         foreach (string node in nodes)
                         {
                             e.Node.Nodes.Add(node);
-                            e.Node.Nodes[e.Node.Nodes.Count - 1].Name = e.Node.Name.Substring(0, e.Node.Name.Length - 1);
+                            e.Node.Nodes[e.Node.Nodes.Count - 1].Name =
+                                e.Node.Name.Substring(0, e.Node.Name.Length - 1);
                         }
 
                         break;
@@ -195,12 +195,15 @@ namespace Data
                 if (dataTables?.Count > 0)
                 {
                     ResultView.DataSource = dataTables[0];
-                    LogTextBox.Text += string.Format("{0}) {1}: Данные успешно найдены\n", CountLogs,DateTime.Now);
+                    LogTextBox.Text += string.Format("{0}) {1}: Данные успешно найдены\n", CountLogs, DateTime.Now);
                     CountLogs++;
                 }
                 else
                 {
-                    LogTextBox.Text += string.Format("{0}) {1}: Не удалось получить или найти данные\n", CountLogs,DateTime.Now);
+                    LogTextBox.Text += string.Format(
+                        "{0}) {1}: Не удалось получить или найти данные\n",
+                        CountLogs,
+                        DateTime.Now);
                     ResultView.DataSource = null;
                     CountLogs++;
                 }
@@ -228,9 +231,12 @@ namespace Data
 
                 dataAdapter.Update(dataRows.ToArray());
             }
-            catch 
+            catch
             {
-                LogTextBox.Text += string.Format("{0}) {1}: Не удалось обновить данные в таблице, т.к. отсутствует первичный ключ\n", CountLogs, DateTime.Now);
+                LogTextBox.Text += string.Format(
+                    "{0}) {1}: Не удалось обновить данные в таблице, т.к. отсутствует первичный ключ\n",
+                    CountLogs,
+                    DateTime.Now);
                 CountLogs++;
             }
 
@@ -250,7 +256,7 @@ namespace Data
             {
                 Data.GetTable("drop", currentNode.Text);
             }
-            
+
         }
     }
 }
