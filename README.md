@@ -1,6 +1,6 @@
 # Postgre-client
 
-Клиент для субд PostgreSQL на платформе Windows, реализован на .Net
+Клиент для работы с субд PostgreSQL на платформе Windows, реализован на .Net
 
 ## Подключение к субд
 
